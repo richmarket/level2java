@@ -1,0 +1,53 @@
+import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
+class test  
+{
+
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		System.out.println("hi");
+		try 
+		{
+            //1.建立客户端socket连接，指定服务器位置及端口
+            Socket socket =new Socket("101.132.153.96",30920);
+            //2.得到socket读写流
+            OutputStream os=socket.getOutputStream();
+            PrintWriter pw=new PrintWriter(os);
+            //输入流
+            InputStream is=socket.getInputStream();
+            BufferedReader br=new BufferedReader(new InputStreamReader(is));
+
+            //3.利用流按照一定的操作，对socket进行读写操作
+            //String info="level2_api_33617get_allmarket" + "\n" + "linpin" + "\n\n\n\n";
+            String info="level2_api_33617get_allmarket" + "\n" + "login_user" + "\n"+user+"\n"+pass+"\n"+"\n";
+            pw.write(info);
+            pw.flush();
+            socket.shutdownOutput();
+            //接收服务器的响应
+            String reply="";
+            char[] bytes = new char[1024 * 1024];
+            int len = 0 ;
+            while((len=br.read(bytes))!=-1)
+            {
+                System.out.println(new String(bytes,0,len));
+                //System.out.println("接收服务器的信息："+reply);
+            }
+            //4.关闭资源
+            br.close();
+            is.close();
+            pw.close();
+            os.close();
+            socket.close();
+        }
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+        
+    }
+
+	
+}
